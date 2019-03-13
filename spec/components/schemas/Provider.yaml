@@ -1,0 +1,29 @@
+type: object
+properties:
+    name:
+        type: string
+    status:
+        type: string
+    config:
+        type: array
+        items:
+            $ref: "#/components/schemas/ProviderConfig"
+    configuration:
+        type: object
+    data:
+        type: object
+    createdBy:
+        type: string
+    createdAt:
+        type: string
+        format: date
+    updatedAt:
+        type: string
+        format: date
+    creator:
+        $ref: "#/components/schemas/User"
+required:
+    - name
+    - status
+    - createdAt
+    - updatedAt

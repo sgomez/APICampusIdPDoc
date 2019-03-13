@@ -1,0 +1,15 @@
+type: object
+properties:
+    ver:
+        type: string
+        example: aa356133-e272-4c99-b7a9-93611acd78b8
+    status:
+        type: string
+        example: pending
+    approved:
+        type: boolean
+        example: false
+    flatcompact:
+        type: object
+required:
+    - ver

@@ -1,0 +1,10 @@
+type: object
+properties:
+    username:
+        description: User supplied username
+        type: string
+        example: John
+    password:
+        description: User supplied password
+        type: string
+        example: 1234

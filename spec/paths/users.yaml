@@ -1,0 +1,36 @@
+get:
+    tags:
+        - User
+    summary: Get all users
+    operationId: getUsers
+    parameters:
+        - name: email
+          in: query
+          description: Search by email
+          schema:
+              type: string
+        - name: username
+          in: query
+          description: Search by username
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: "#/components/schemas/User"
+        "400":
+            description: Invalid query result
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    example:
+                        error: true
+                        message: invalid query value

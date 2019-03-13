@@ -1,0 +1,14 @@
+type: object
+properties:
+    success:
+        description: Response status
+        type: boolean
+        example: true
+    message:
+        description: Message
+        type: string
+        example: authn ok
+    token:
+        description: JWT token
+        type: string
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"

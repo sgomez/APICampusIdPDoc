@@ -1,0 +1,15 @@
+type: object
+properties:
+    name:
+        type: string
+    created:
+        type: string
+        format: date
+    creator:
+        format: string
+    states:
+        type: array
+        items:
+            $ref: "#/components/schemas/State"
+required:
+    - createdAt

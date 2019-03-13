@@ -1,0 +1,126 @@
+get:
+    tags:
+        - Tasks
+    summary: Get tasks
+    operationId: getTasks
+    parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: "#/components/schemas/JobResponse"
+        "401":
+            description: Access denied
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    examples:
+                        UserNotFound:
+                            value:
+                                error: true
+                                message: Not permitted
+                                id: 252007
+                        NotOwner:
+                            value:
+                                error: true
+                                message: Authorization failed
+                                id: 252008
+        "404":
+            description: Not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    example:
+                        error: true
+                        message: Not found
+                        id: 252010
+post:
+    tags:
+        - Tasks
+    summary: Add task
+    operationId: addTask
+    parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Job"
+                    example:
+                        _id: 207b881f-c129-463f-af9a-c9cc89487f62
+                        name: Task name
+                        qtoken: xxx
+                        creator:
+                            username: johndoe
+                        provider:
+                            name: name-of-provider
+
+        "400":
+            description: Task not supported
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    example:
+                        error: true
+                        message: Task request not supported
+                        id: 252006
+        "401":
+            description: Access denied
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    examples:
+                        UserNotFound:
+                            value:
+                                error: true
+                                message: Not permitted
+                                id: 252007
+                        NotOwner:
+                            value:
+                                error: true
+                                message: Authorization failed
+                                id: 252008
+        "404":
+            description: Not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    example:
+                        error: true
+                        message: Not found
+                        id: 252010
+
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: "#/components/schemas/Task"
+            application/x-www-form-urlencoded:
+                schema:
+                    $ref: "#/components/schemas/Task"

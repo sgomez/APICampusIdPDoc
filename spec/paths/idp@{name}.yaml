@@ -1,0 +1,91 @@
+get:
+    tags:
+        - IdP
+    summary: Remove service
+    operationId: deleteTask
+    parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                        example:
+                            error: false
+                            message: OK
+
+delete:
+    tags:
+        - IdP
+    summary: Remove service
+    operationId: deleteTask
+    parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                        example:
+                            error: false
+                            message: OK
+        "400":
+            description: Bad request
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    examples:
+                        MissingParam:
+                            value:
+                                error: true
+                                message: Missing param
+                        IncorrectParam:
+                            value:
+                                error: true
+                                message: Incorrect param
+        "401":
+            description: Access denied
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    example:
+                        error: true
+                        message: Not authorized
+        "404":
+            description: Not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    example:
+                        error: true
+                        message: Not found
+        "500":
+            description: Server error
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    example:
+                        error: true
+                        message: error

@@ -1,0 +1,14 @@
+type: object
+properties:
+    success:
+        description: Respons status
+        type: boolean
+        example: false
+    message:
+        description: Message error
+        type: string
+        example: Authentication failed
+    id:
+        description: Code error
+        type: string
+        example: "232001"

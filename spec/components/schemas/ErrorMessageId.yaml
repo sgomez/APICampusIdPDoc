@@ -1,0 +1,10 @@
+type: object
+properties:
+    error:
+        type: boolean
+    message:
+        description: Message error
+        type: string
+    id:
+        description: Message error id
+        type: string

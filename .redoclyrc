@@ -1,0 +1,8 @@
+
+apiTitle: APICampusIdP
+splitSpec: true
+codeSamples: true
+swaggerUI: true
+travis: true
+repo: sgomez/APICampusIdPDoc
+oasVersion: 3.0.0

@@ -1,0 +1,33 @@
+post:
+    tags:
+        - User
+    summary: Register an user
+    operationId: registerUser
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/User"
+
+        "400":
+            description: Email/username already exists
+            content:
+                application/json:
+                    description: Invalid request
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    examples:
+                        Duplicated:
+                            value:
+                                error: true
+                                message: Email/username already exists
+                                id: 255001
+                        Unknown:
+                            value:
+                                error: true
+                                message: Unknown
+                                id: 255002
