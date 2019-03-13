@@ -1,0 +1,6 @@
+type: object
+properties:
+    task:
+        description: Task type
+        type: string
+        example: ansible

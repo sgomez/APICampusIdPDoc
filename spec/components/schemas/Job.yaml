@@ -1,0 +1,24 @@
+type: object
+properties:
+    name:
+        type: string
+    params:
+        type: object
+    createdBy:
+        type: string
+    sourceIP:
+        type: string
+    qtoken:
+        type: string
+    createdAt:
+        type: string
+        format: date
+    creator:
+        $ref: "#/components/schemas/User"
+    provider:
+        type: object
+    states:
+        type: array
+        items:
+            $ref: "#/components/schemas/State"
+required: createdAt

@@ -1,0 +1,13 @@
+get:
+    tags:
+        - Context
+    summary: Get context
+    operationID: Get context
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema: ~
+                application/ld+json:
+                    schema: ~

@@ -1,0 +1,49 @@
+get:
+    tags:
+        - User
+    summary: Get user by id
+    operationId: getUserById
+    parameters:
+        - name: id
+          in: path
+          description: Search by id
+          required: true
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/User"
+        "404":
+            description: Not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    example:
+                        error: true
+                        message: Not found
+
+delete:
+    tags:
+        - User
+    summary: Remove user by id
+    description: Not implemented
+    operationId: removeUserById
+    parameters:
+        - name: id
+          in: path
+          description: Search by id
+          required: true
+          schema:
+              type: string
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success

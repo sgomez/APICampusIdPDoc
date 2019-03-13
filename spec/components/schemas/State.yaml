@@ -1,0 +1,15 @@
+type: object
+properties:
+    createdAt:
+        type: string
+        format: date
+    jobstate:
+        type: string
+    details:
+        type: string
+    finishstate:
+        type: string
+required:
+    - createdAt
+    - jobstate
+    - finishstate

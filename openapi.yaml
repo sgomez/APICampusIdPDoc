@@ -1,0 +1,724 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: APICampusIdP
+tags:
+  - name: User
+    description: Operations about user
+paths:
+  /authentication:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate use
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccess'
+        '401':
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                IncompleteRequest:
+                  value:
+                    success: false
+                    message: Authentication failed. Username/Password not provided.
+                    id: 232001
+                AuthFailed:
+                  value:
+                    success: false
+                    message: Authentication failed.
+                    id: 232002
+                WrongPassword:
+                  value:
+                    success: false
+                    message: Authentication failed. Wrong password.
+                    id: 232003
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Auth'
+  /context:
+    get:
+      tags:
+        - Context
+      summary: Get context
+      operationID: Get context
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: null
+            application/ld+json:
+              schema: null
+  /idp:
+    get:
+      tags:
+        - IdP
+      summary: Get all services by logged user
+      operationId: getServices
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                '@context':
+                  '@vocab': 'http://geant.org/schema/campusidp/'
+                  xsd: 'http://www.w3.org/2001/XMLSchema#'
+                  ref:
+                    '@type': '@id'
+                  confRef:
+                    '@type': '@id'
+                  dependency:
+                    '@type': '@id'
+                  exposed:
+                    '@type': 'xsd:boolean'
+                  apiVersion: 'xsd:string'
+                '@type': Collection
+                members:
+                  - _id: 5a732fe67851ed112fcca5b7
+                    '@type': ServiceDescription
+                    name: Provider name
+                    status: pending
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              example:
+                error: true
+                message: Not found
+                id: 201013
+    post:
+      tags:
+        - IdP
+      summary: Create a new service
+      operationId: addService
+      security:
+        - bearer_auth: []
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              example:
+                error: false
+                message: request received
+        '400':
+          description: Wrong parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              examples:
+                MissingHostname:
+                  value:
+                    error: true
+                    message: Missing hostname
+                    id: 251001
+                MissingEntityID:
+                  value:
+                    error: true
+                    message: Missing entity ID
+                    id: 251002
+                MismatchHostname:
+                  value:
+                    error: true
+                    message: EntityID does not match hostname
+                    id: 251003
+        '409':
+          description: Duplicated host
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              example:
+                error: true
+                message: Host already exists
+                id: 251004
+        '500':
+          description: General error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              example:
+                error: true
+                id: 251005
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                inputhostname:
+                  type: string
+  '/idp/{name}':
+    get:
+      tags:
+        - IdP
+      summary: Remove service
+      operationId: deleteTask
+      parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                example:
+                  error: false
+                  message: OK
+    delete:
+      tags:
+        - IdP
+      summary: Remove service
+      operationId: deleteTask
+      parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                example:
+                  error: false
+                  message: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              examples:
+                MissingParam:
+                  value:
+                    error: true
+                    message: Missing param
+                IncorrectParam:
+                  value:
+                    error: true
+                    message: Incorrect param
+        '401':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              example:
+                error: true
+                message: Not authorized
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              example:
+                error: true
+                message: Not found
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              example:
+                error: true
+                message: error
+  /schema:
+    get:
+      tags:
+        - Schema
+      summary: Get schema
+      operationId: getSchema
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: null
+            application/ld+json:
+              schema: null
+  '/tasks/idp/{name}':
+    get:
+      tags:
+        - Tasks
+      summary: Get tasks
+      operationId: getTasks
+      parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobResponse'
+        '401':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              examples:
+                UserNotFound:
+                  value:
+                    error: true
+                    message: Not permitted
+                    id: 252007
+                NotOwner:
+                  value:
+                    error: true
+                    message: Authorization failed
+                    id: 252008
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              example:
+                error: true
+                message: Not found
+                id: 252010
+    post:
+      tags:
+        - Tasks
+      summary: Add task
+      operationId: addTask
+      parameters:
+        - name: name
+          in: path
+          description: Task name
+          required: true
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+              example:
+                _id: 207b881f-c129-463f-af9a-c9cc89487f62
+                name: Task name
+                qtoken: xxx
+                creator:
+                  username: johndoe
+                provider:
+                  name: name-of-provider
+        '400':
+          description: Task not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              example:
+                error: true
+                message: Task request not supported
+                id: 252006
+        '401':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              examples:
+                UserNotFound:
+                  value:
+                    error: true
+                    message: Not permitted
+                    id: 252007
+                NotOwner:
+                  value:
+                    error: true
+                    message: Authorization failed
+                    id: 252008
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              example:
+                error: true
+                message: Not found
+                id: 252010
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Task'
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      operationId: getUsers
+      parameters:
+        - name: email
+          in: query
+          description: Search by email
+          schema:
+            type: string
+        - name: username
+          in: query
+          description: Search by username
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid query result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              example:
+                error: true
+                message: invalid query value
+  '/users/{id}':
+    get:
+      tags:
+        - User
+      summary: Get user by id
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: Search by id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+              example:
+                error: true
+                message: Not found
+    delete:
+      tags:
+        - User
+      summary: Remove user by id
+      description: Not implemented
+      operationId: removeUserById
+      parameters:
+        - name: id
+          in: path
+          description: Search by id
+          required: true
+          schema:
+            type: string
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+  /users/register:
+    post:
+      tags:
+        - User
+      summary: Register an user
+      operationId: registerUser
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Email/username already exists
+          content:
+            application/json:
+              description: Invalid request
+              schema:
+                $ref: '#/components/schemas/ErrorMessageId'
+              examples:
+                Duplicated:
+                  value:
+                    error: true
+                    message: Email/username already exists
+                    id: 255001
+                Unknown:
+                  value:
+                    error: true
+                    message: Unknown
+                    id: 255002
+components:
+  schemas:
+    Auth:
+      type: object
+      properties:
+        username:
+          description: User supplied username
+          type: string
+          example: John
+        password:
+          description: User supplied password
+          type: string
+          example: 1234
+    AuthError:
+      type: object
+      properties:
+        success:
+          description: Respons status
+          type: boolean
+          example: false
+        message:
+          description: Message error
+          type: string
+          example: Authentication failed
+        id:
+          description: Code error
+          type: string
+          example: '232001'
+    AuthSuccess:
+      type: object
+      properties:
+        success:
+          description: Response status
+          type: boolean
+          example: true
+        message:
+          description: Message
+          type: string
+          example: authn ok
+        token:
+          description: JWT token
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    Email:
+      description: User email address
+      type: string
+      format: test
+      example: john.smith@example.com
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          description: Message error
+          type: string
+    ErrorMessageId:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          description: Message error
+          type: string
+        id:
+          description: Message error id
+          type: string
+    Job:
+      type: object
+      properties:
+        name:
+          type: string
+        params:
+          type: object
+        createdBy:
+          type: string
+        sourceIP:
+          type: string
+        qtoken:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        creator:
+          $ref: '#/components/schemas/User'
+        provider:
+          type: object
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+      required: createdAt
+    JobResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        created:
+          type: string
+          format: date
+        creator:
+          format: string
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+      required:
+        - createdAt
+    Provider:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderConfig'
+        configuration:
+          type: object
+        data:
+          type: object
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+        creator:
+          $ref: '#/components/schemas/User'
+      required:
+        - name
+        - status
+        - createdAt
+        - updatedAt
+    ProviderConfig:
+      type: object
+      properties:
+        ver:
+          type: string
+          example: aa356133-e272-4c99-b7a9-93611acd78b8
+        status:
+          type: string
+          example: pending
+        approved:
+          type: boolean
+          example: false
+        flatcompact:
+          type: object
+      required:
+        - ver
+    State:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date
+        jobstate:
+          type: string
+        details:
+          type: string
+        finishstate:
+          type: string
+      required:
+        - createdAt
+        - jobstate
+        - finishstate
+    Task:
+      type: object
+      properties:
+        task:
+          description: Task type
+          type: string
+          example: ansible
+    User:
+      type: object
+      properties:
+        _id:
+          description: User id.
+          type: string
+          example: 7a830655-fef5-4626-a5f4-1629fe555de3
+        username:
+          description: User supplied username
+          type: string
+          example: John78
+        email:
+          $ref: '#/components/schemas/Email'
+  headers:
+    ExpiresAfter:
+      description: date in UTC when token expires
+      schema:
+        type: string
+        format: date-time
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

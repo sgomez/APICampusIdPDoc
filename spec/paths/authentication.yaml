@@ -1,0 +1,43 @@
+post:
+    tags:
+        - Authentication
+    summary: Authenticate use
+    responses:
+        "200":
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/AuthSuccess"
+
+        "401":
+            description: Authentication failed.
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/AuthError"
+                    examples:
+                        IncompleteRequest:
+                            value:
+                                success: false
+                                message: Authentication failed. Username/Password not provided.
+                                id: 232001
+                        AuthFailed:
+                            value:
+                                success: false
+                                message: Authentication failed.
+                                id: 232002
+                        WrongPassword:
+                            value:
+                                success: false
+                                message: Authentication failed. Wrong password.
+                                id: 232003
+
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: "#/components/schemas/Auth"
+            application/x-www-form-urlencoded:
+                schema:
+                    $ref: "#/components/schemas/Auth"

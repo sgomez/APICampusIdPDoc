@@ -1,0 +1,12 @@
+type: object
+properties:
+    _id:
+        description: User id.
+        type: string
+        example: 7a830655-fef5-4626-a5f4-1629fe555de3
+    username:
+        description: User supplied username
+        type: string
+        example: John78
+    email:
+        $ref: "#/components/schemas/Email"

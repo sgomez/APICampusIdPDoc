@@ -1,0 +1,110 @@
+get:
+    tags:
+        - IdP
+    summary: Get all services by logged user
+    operationId: getServices
+    security:
+        - bearer_auth: []
+    responses:
+        "200":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        type: object
+                    example:
+                        "@context":
+                            "@vocab": "http://geant.org/schema/campusidp/"
+                            "xsd": "http://www.w3.org/2001/XMLSchema#"
+                            "ref":
+                                "@type": "@id"
+                            "confRef":
+                                "@type": "@id"
+                            "dependency":
+                                "@type": "@id"
+                            "exposed":
+                                "@type": "xsd:boolean"
+                            "apiVersion": "xsd:string"
+                        "@type": Collection
+                        "members":
+                            - _id: 5a732fe67851ed112fcca5b7
+                              "@type": "ServiceDescription"
+                              name: Provider name
+                              status: pending
+        "404":
+            description: Not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    example:
+                        error: true
+                        message: Not found
+                        id: 201013
+
+post:
+    tags:
+        - IdP
+    summary: Create a new service
+    operationId: addService
+    security:
+        - bearer_auth: []
+    responses:
+        "202":
+            description: Success
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessage"
+                    example:
+                        error: false
+                        message: request received
+        "400":
+            description: Wrong parameters
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    examples:
+                        MissingHostname:
+                            value:
+                                error: true
+                                message: Missing hostname
+                                id: 251001
+                        MissingEntityID:
+                            value:
+                                error: true
+                                message: Missing entity ID
+                                id: 251002
+                        MismatchHostname:
+                            value:
+                                error: true
+                                message: EntityID does not match hostname
+                                id: 251003
+        "409":
+            description: Duplicated host
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    example:
+                        error: true
+                        message: Host already exists
+                        id: 251004
+        "500":
+            description: General error
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorMessageId"
+                    example:
+                        error: true
+                        id: 251005
+    requestBody:
+        content:
+            application/x-www-form-urlencoded:
+                schema:
+                    type: object
+                    properties:
+                        inputhostname:
+                            type: string
